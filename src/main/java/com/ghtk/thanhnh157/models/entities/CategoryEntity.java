@@ -1,74 +1,34 @@
 package com.ghtk.thanhnh157.models.entities;
 
+import com.ghtk.thanhnh157.constants.CategoryStatus;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Table(name = "category")
 public class CategoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "code")
     private String code;
-    private Integer status;
+
+    @Column(name = "status")
+    private CategoryStatus status;
+
+    @Column(name = "description")
     private String description;
-
-    public CategoryEntity() {
-    }
-
-    public CategoryEntity(String name, String code, Integer status, String description) {
-        this.name = name;
-        this.code = code;
-        this.status = status;
-        this.description = description;
-    }
-
-    public CategoryEntity(Integer id, String name, String code, Integer status, String description) {
-        this.id = id;
-        this.name = name;
-        this.code = code;
-        this.status = status;
-        this.description = description;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 }
 

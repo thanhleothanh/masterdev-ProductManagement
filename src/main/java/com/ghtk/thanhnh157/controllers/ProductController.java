@@ -1,10 +1,13 @@
 package com.ghtk.thanhnh157.controllers;
 
-import com.ghtk.thanhnh157.constants.PagingHeaders;
 import com.ghtk.thanhnh157.models.entities.ProductEntity;
 import com.ghtk.thanhnh157.models.responses.ProductPagingResponse;
 import com.ghtk.thanhnh157.services.ProductServiceImpl;
-import net.kaczmarzyk.spring.data.jpa.domain.*;
+import com.ghtk.thanhnh157.utils.HttpHeadersUtils;
+import net.kaczmarzyk.spring.data.jpa.domain.Equal;
+import net.kaczmarzyk.spring.data.jpa.domain.GreaterThan;
+import net.kaczmarzyk.spring.data.jpa.domain.LessThan;
+import net.kaczmarzyk.spring.data.jpa.domain.Like;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "api/v1/products")
@@ -31,7 +33,7 @@ public class ProductController {
                     @Spec(path = "name", params = "name", spec = Like.class),
                     @Spec(path = "status", params = "status", spec = Equal.class),
                     @Spec(path = "description", params = "description", spec = Like.class),
-                    @Spec(path = "category_id", params = "category_id", spec = Equal.class),
+                    @Spec(path = "categoryId", params = "categoryId", spec = Equal.class),
                     @Spec(path = "sku", params = "sku", spec = Like.class),
                     @Spec(path = "price", params = "price", spec = Equal.class),
                     @Spec(path = "price", params = "priceLt", spec = LessThan.class),
@@ -40,7 +42,7 @@ public class ProductController {
             Sort sort,
             @RequestHeader HttpHeaders headers) {
         final ProductPagingResponse response = productService.get(spec, headers, sort);
-        return new ResponseEntity<>(response.getProducts(), returnHttpHeaders(response), HttpStatus.OK);
+        return new ResponseEntity<>(response.getProducts(), HttpHeadersUtils.returnHttpHeaders(response), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -66,19 +68,4 @@ public class ProductController {
     public void delete(@PathVariable Integer id) {
         productService.deleteById(id);
     }
-
-
-    /**
-     * util methods
-     */
-
-    public HttpHeaders returnHttpHeaders(ProductPagingResponse response) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set(PagingHeaders.COUNT.getName(), String.valueOf(response.getCount()));
-        headers.set(PagingHeaders.PAGE.getName(), String.valueOf(response.getPage()));
-        headers.set(PagingHeaders.PAGE_SIZE.getName(), String.valueOf(response.getPageSize()));
-        headers.set(PagingHeaders.PAGE_TOTAL.getName(), String.valueOf(response.getPageTotal()));
-        return headers;
-    }
-
 }

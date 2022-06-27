@@ -1,84 +1,40 @@
 package com.ghtk.thanhnh157.models.entities;
 
+import com.ghtk.thanhnh157.constants.WarehouseStatus;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Table(name = "warehouse")
 public class WarehouseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "address")
     private String address;
-    private Integer status;
-    private Integer province_id;
-    private Integer district_id;
 
-    public WarehouseEntity() {
-    }
+    @Column(name = "status")
+    private WarehouseStatus status;
 
-    public WarehouseEntity(String name, String address, Integer status, Integer province_id, Integer district_id) {
-        this.name = name;
-        this.address = address;
-        this.status = status;
-        this.province_id = province_id;
-        this.district_id = district_id;
-    }
+    @ManyToOne
+    @JoinColumn(name = "province_id", nullable = false)
+    private ProvinceEntity province;
 
-    public WarehouseEntity(Integer id, String name, String address, Integer status, Integer province_id, Integer district_id) {
-        this.id = id;
-        this.name = name;
-        this.address = address;
-        this.status = status;
-        this.province_id = province_id;
-        this.district_id = district_id;
-    }
+    @ManyToOne
+    @JoinColumn(name = "district_id", nullable = false)
+    private DistrictEntity district;
 
-    public Integer getId() {
-        return id;
-    }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    public Integer getProvince_id() {
-        return province_id;
-    }
-
-    public void setProvince_id(Integer province_id) {
-        this.province_id = province_id;
-    }
-
-    public Integer getDistrict_id() {
-        return district_id;
-    }
-
-    public void setDistrict_id(Integer district_id) {
-        this.district_id = district_id;
-    }
 }
