@@ -1,4 +1,4 @@
-package com.ghtk.thanhnh157.utils;
+package com.ghtk.thanhnh157.utils.enumConverters;
 
 import com.ghtk.thanhnh157.constants.WarehouseStatus;
 
@@ -10,9 +10,9 @@ import java.util.stream.Stream;
 public class WarehouseStatusConverter implements AttributeConverter<WarehouseStatus, Integer> {
 
     @Override
-    public Integer convertToDatabaseColumn(WarehouseStatus productStatus) {
-        if (productStatus == null) return null;
-        return productStatus.getStatus();
+    public Integer convertToDatabaseColumn(WarehouseStatus warehouseStatus) {
+        if (warehouseStatus == null) return null;
+        return warehouseStatus.getStatus();
     }
 
     @Override

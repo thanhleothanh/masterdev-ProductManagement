@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @Entity
 @NoArgsConstructor
@@ -14,7 +16,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Table(name = "product")
-public class ProductEntity {
+public class ProductEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -37,4 +39,10 @@ public class ProductEntity {
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private CategoryEntity category;
+
+    @PrePersist
+    public void prePersist() {
+        this.sku = this.category.getCode() + ".sku." + LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS);
+        this.status = ProductStatus.valueOf("ACTIVE");
+    }
 }

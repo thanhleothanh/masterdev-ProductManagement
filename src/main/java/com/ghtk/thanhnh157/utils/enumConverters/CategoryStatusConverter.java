@@ -1,4 +1,4 @@
-package com.ghtk.thanhnh157.utils;
+package com.ghtk.thanhnh157.utils.enumConverters;
 
 import com.ghtk.thanhnh157.constants.CategoryStatus;
 
@@ -10,9 +10,9 @@ import java.util.stream.Stream;
 public class CategoryStatusConverter implements AttributeConverter<CategoryStatus, Integer> {
 
     @Override
-    public Integer convertToDatabaseColumn(CategoryStatus productStatus) {
-        if (productStatus == null) return null;
-        return productStatus.getStatus();
+    public Integer convertToDatabaseColumn(CategoryStatus categoryStatus) {
+        if (categoryStatus == null) return null;
+        return categoryStatus.getStatus();
     }
 
     @Override

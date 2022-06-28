@@ -1,7 +1,9 @@
 package com.ghtk.thanhnh157.services;
 
+import com.ghtk.thanhnh157.exceptions.NotFoundException;
 import com.ghtk.thanhnh157.models.entities.ProductEntity;
 import com.ghtk.thanhnh157.models.responses.ProductPagingResponse;
+import com.ghtk.thanhnh157.repositories.CategoryRepository;
 import com.ghtk.thanhnh157.repositories.ProductRepository;
 import com.ghtk.thanhnh157.utils.PaginationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +14,14 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
 public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Override
     public ProductPagingResponse get(Specification<ProductEntity> spec, HttpHeaders headers, Sort sort) {
@@ -33,7 +36,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductEntity getById(Integer id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(("Không tìm thấy product với id này!")));
+                .orElseThrow(() -> new NotFoundException("Không tìm thấy product với id này!"));
     }
 
     @Override
@@ -49,7 +52,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteById(Integer id) {
         ProductEntity product = productRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(("Không tìm thấy product với id này!")));
+                .orElseThrow(() -> new NotFoundException("Không tìm thấy product với id này!"));
         productRepository.delete(product);
     }
 
