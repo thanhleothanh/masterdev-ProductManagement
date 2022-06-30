@@ -30,7 +30,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void deleteById(Integer id) {
         CategoryEntity category = categoryRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(("Không tìm thấy category với id này!")));
+                .orElseThrow(() -> new NotFoundException("Không tìm thấy category với id này!"));
         categoryRepository.delete(category);
 
     }

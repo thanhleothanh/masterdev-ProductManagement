@@ -56,24 +56,27 @@ public class ProductController {
             Sort sort,
             @RequestHeader HttpHeaders headers) {
         ProductPagingResponse pagingResponse = productService.get(spec, headers, sort);
-        List<ProductDto> listProductDto = entityToDtoConverter.convertToListProductDto(pagingResponse.getProducts());
-        CommonResponse response = new CommonResponse("Sucess", listProductDto);
+
+        List<ProductDto> productDtoResponse = entityToDtoConverter.convertToListProductDto(pagingResponse.getProducts());
+        CommonResponse response = new CommonResponse(true, "Sucess", productDtoResponse, null);
         return new ResponseEntity<>(response, HttpHeadersUtils.returnHttpHeaders(pagingResponse), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<CommonResponse> getById(@PathVariable(value = "id") int id) {
-        CommonResponse response = new CommonResponse("Sucess", entityToDtoConverter.convertToDto(productService.getById(id)));
+        ProductDto productDtoResponse = entityToDtoConverter.convertToDto(productService.getById(id));
+        CommonResponse response = new CommonResponse(true, "Sucess", productDtoResponse, null);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("")
     public ResponseEntity<CommonResponse> create(@Validated @RequestBody ProductDto productDto) {
         CategoryEntity categoryEntity = categoryService.getById(productDto.getCategory().getId());
-
         ProductEntity productEntity = dtoToEntityConverter.convertToEntity(productDto);
         productEntity.setCategory(categoryEntity);
-        CommonResponse response = new CommonResponse("Sucess", entityToDtoConverter.convertToDto(productService.save(productEntity)));
+
+        ProductDto productDtoResponse = entityToDtoConverter.convertToDto(productService.save(productEntity));
+        CommonResponse response = new CommonResponse(true, "Sucess", productDtoResponse, null);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
@@ -81,18 +84,20 @@ public class ProductController {
     public ResponseEntity<CommonResponse> put(@Validated @RequestBody ProductDto productDto) {
         CategoryEntity categoryEntity = categoryService.getById(productDto.getCategory().getId());
         ProductEntity productEntity = productService.getById(productDto.getId());
-
         productEntity = dtoToEntityConverter.convertToEntity(productDto);
         productEntity.setId(productDto.getId());
         productEntity.setCategory(categoryEntity);
-        CommonResponse response = new CommonResponse("Sucess", entityToDtoConverter.convertToDto(productService.put(productEntity)));
+
+        ProductDto productDtoResponse = entityToDtoConverter.convertToDto(productService.put(productEntity));
+        CommonResponse response = new CommonResponse(true, "Sucess", productDtoResponse, null);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<CommonResponse> delete(@PathVariable Integer id) {
         productService.deleteById(id);
-        CommonResponse response = new CommonResponse("Deleted resource", null);
+
+        CommonResponse response = new CommonResponse(true, "Deleted resource", null, null);
         return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
     }
 }
