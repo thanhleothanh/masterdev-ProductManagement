@@ -1,10 +1,12 @@
-package com.ghtk.thanhnh157.services;
+package com.ghtk.thanhnh157.services.impl;
 
+import com.ghtk.thanhnh157.constants.ProductStatus;
 import com.ghtk.thanhnh157.exceptions.NotFoundException;
 import com.ghtk.thanhnh157.models.entities.ProductEntity;
 import com.ghtk.thanhnh157.models.responses.ProductPagingResponse;
 import com.ghtk.thanhnh157.repositories.CategoryRepository;
 import com.ghtk.thanhnh157.repositories.ProductRepository;
+import com.ghtk.thanhnh157.services.ProductService;
 import com.ghtk.thanhnh157.utils.PaginationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -53,7 +55,9 @@ public class ProductServiceImpl implements ProductService {
     public void deleteById(Integer id) {
         ProductEntity product = productRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Không tìm thấy product với id này!"));
-        productRepository.delete(product);
+//        productRepository.delete(product);
+        product.setStatus(ProductStatus.INACTIVE);
+        productRepository.save(product);
     }
 
     /**

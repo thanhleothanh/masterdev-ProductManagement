@@ -1,0 +1,1 @@
+cần config lại mysql local db trong file application.properties

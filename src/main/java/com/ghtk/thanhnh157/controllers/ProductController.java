@@ -5,8 +5,8 @@ import com.ghtk.thanhnh157.models.entities.CategoryEntity;
 import com.ghtk.thanhnh157.models.entities.ProductEntity;
 import com.ghtk.thanhnh157.models.responses.CommonResponse;
 import com.ghtk.thanhnh157.models.responses.ProductPagingResponse;
-import com.ghtk.thanhnh157.services.CategoryServiceImpl;
-import com.ghtk.thanhnh157.services.ProductServiceImpl;
+import com.ghtk.thanhnh157.services.impl.CategoryServiceImpl;
+import com.ghtk.thanhnh157.services.impl.ProductServiceImpl;
 import com.ghtk.thanhnh157.utils.DtoToEntityConverter;
 import com.ghtk.thanhnh157.utils.EntityToDtoConverter;
 import com.ghtk.thanhnh157.utils.HttpHeadersUtils;
@@ -58,38 +58,39 @@ public class ProductController {
         ProductPagingResponse pagingResponse = productService.get(spec, headers, sort);
 
         List<ProductDto> productDtoResponse = entityToDtoConverter.convertToListProductDto(pagingResponse.getProducts());
-        CommonResponse response = new CommonResponse(true, "Sucess", productDtoResponse, null);
+        CommonResponse response = new CommonResponse(true, "Success", productDtoResponse, null);
         return new ResponseEntity<>(response, HttpHeadersUtils.returnHttpHeaders(pagingResponse), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<CommonResponse> getById(@PathVariable(value = "id") int id) {
         ProductDto productDtoResponse = entityToDtoConverter.convertToDto(productService.getById(id));
-        CommonResponse response = new CommonResponse(true, "Sucess", productDtoResponse, null);
+        CommonResponse response = new CommonResponse(true, "Success", productDtoResponse, null);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("")
-    public ResponseEntity<CommonResponse> create(@Validated @RequestBody ProductDto productDto) {
+    public ResponseEntity<CommonResponse> save(@Validated @RequestBody ProductDto productDto) {
         CategoryEntity categoryEntity = categoryService.getById(productDto.getCategory().getId());
         ProductEntity productEntity = dtoToEntityConverter.convertToEntity(productDto);
         productEntity.setCategory(categoryEntity);
 
         ProductDto productDtoResponse = entityToDtoConverter.convertToDto(productService.save(productEntity));
-        CommonResponse response = new CommonResponse(true, "Sucess", productDtoResponse, null);
+        CommonResponse response = new CommonResponse(true, "Success", productDtoResponse, null);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PutMapping("")
     public ResponseEntity<CommonResponse> put(@Validated @RequestBody ProductDto productDto) {
         CategoryEntity categoryEntity = categoryService.getById(productDto.getCategory().getId());
-        ProductEntity productEntity = productService.getById(productDto.getId());
+        //gọi getById Product để check xem có product với id trong body không nếu không thì throw not found
+        ProductEntity productEntity = productService.getById(productDto.getId() != null ? productDto.getId() : 0);
         productEntity = dtoToEntityConverter.convertToEntity(productDto);
         productEntity.setId(productDto.getId());
         productEntity.setCategory(categoryEntity);
 
         ProductDto productDtoResponse = entityToDtoConverter.convertToDto(productService.put(productEntity));
-        CommonResponse response = new CommonResponse(true, "Sucess", productDtoResponse, null);
+        CommonResponse response = new CommonResponse(true, "Success", productDtoResponse, null);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -97,7 +98,7 @@ public class ProductController {
     public ResponseEntity<CommonResponse> delete(@PathVariable Integer id) {
         productService.deleteById(id);
 
-        CommonResponse response = new CommonResponse(true, "Deleted resource", null, null);
+        CommonResponse response = new CommonResponse(true, "Product set to INACTIVE!", null, null);
         return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
     }
 }

@@ -1,8 +1,9 @@
-package com.ghtk.thanhnh157.services;
+package com.ghtk.thanhnh157.services.impl;
 
 import com.ghtk.thanhnh157.exceptions.NotFoundException;
 import com.ghtk.thanhnh157.models.entities.CategoryEntity;
 import com.ghtk.thanhnh157.repositories.CategoryRepository;
+import com.ghtk.thanhnh157.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

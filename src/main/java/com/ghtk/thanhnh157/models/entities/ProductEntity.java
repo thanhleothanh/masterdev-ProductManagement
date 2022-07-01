@@ -27,7 +27,7 @@ public class ProductEntity extends BaseEntity {
     @Column(name = "price")
     private Double price;
 
-    @Column(name = "sku")
+    @Column(name = "sku" , updatable = false, unique = true)
     private String sku;
 
     @Column(name = "status")

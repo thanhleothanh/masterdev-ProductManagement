@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Table(name = "warehouse")
-public class WarehouseEntity {
+public class WarehouseEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -36,5 +36,13 @@ public class WarehouseEntity {
     @JoinColumn(name = "district_id", nullable = false)
     private DistrictEntity district;
 
-
+    @PrePersist
+    public void prePersist() {
+        this.address = this.address +
+                ", " +
+                this.district.getName() +
+                ", " +
+                this.province.getName();
+        this.status = WarehouseStatus.valueOf("ACTIVE");
+    }
 }
